@@ -1,0 +1,23 @@
+{
+  "name": "forkify-app",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cookieMonsterDev/forkify-app.git"
+  },
+  "author": "Mykhailo Toporkov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cookieMonsterDev/forkify-app/issues"
+  },
+  "homepage": "https://github.com/cookieMonsterDev/forkify-app#readme",
+  "devDependencies": {
+    "parcel": "^2.7.0",
+    "sass": "^1.55.0"
+  }
+}
