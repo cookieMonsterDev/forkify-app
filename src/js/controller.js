@@ -1,3 +1,5 @@
+import { getSingleRecipe } from './requests/resquests'
+
 const recipeContainer = document.querySelector('.recipe');
 
 const timeout = function (s) {
@@ -11,3 +13,12 @@ const timeout = function (s) {
 // https://forkify-api.herokuapp.com/v2
 
 ///////////////////////////////////////
+
+const sth = async () => {
+  const a = await getSingleRecipe('5ed6604591c37cdc054bc886')
+
+  console.log(a)
+}
+
+
+sth()
