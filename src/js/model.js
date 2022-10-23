@@ -1,15 +1,15 @@
-import axios from 'axios';
+import { appRequests } from './resquestsRoots';
 
-const appRequests = axios.create({
-  baseURL: 'https://forkify-api.herokuapp.com/api/v2/recipes',
-});
+export const state = {
+  recipe: {},
+};
 
 export const getSingleRecipe = async id => {
   try {
     const res = await appRequests.get(id);
     const body = res.data.data.recipe;
 
-    return {
+    state.recipe = {
       id: body.id,
       title: body.title,
       publisher: body.publisher,
