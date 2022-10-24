@@ -1,6 +1,9 @@
 import axios from 'axios';
+import { BASE_URL, TIMEOUT } from './config';
 
 export const appRequests = axios.create({
-  baseURL: 'https://forkify-api.herokuapp.com/api/v2/recipes',
+  baseURL: BASE_URL,
 });
 
+appRequests.defaults.timeout = TIMEOUT;
+appRequests.defaults.timeoutErrorMessage = 'timeout 🤬🤬🤬';

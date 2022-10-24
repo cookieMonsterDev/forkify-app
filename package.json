@@ -21,6 +21,7 @@
     "axios": "^1.1.3",
     "buffer": "^6.0.3",
     "core-js": "^3.25.5",
+    "fractional": "^1.0.0",
     "parcel": "^2.7.0",
     "process": "^0.11.10",
     "regenerator-runtime": "^0.13.10",

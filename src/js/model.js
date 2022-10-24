@@ -20,6 +20,7 @@ export const getSingleRecipe = async id => {
       ingredients: body.ingredients,
     };
   } catch (err) {
-    throw new Error(`Something went worng!`);
+    console.log(err) 
+    throw new Error(`${err.response.data.message}`);
   }
 };
