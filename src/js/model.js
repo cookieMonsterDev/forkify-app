@@ -2,8 +2,13 @@ import { appRequests } from './resquestsRoots';
 
 export const state = {
   recipe: {},
+  search: {
+    query: '',
+    results: [],
+  },
 };
 
+// Get single recipe by id
 export const getSingleRecipe = async id => {
   try {
     const res = await appRequests.get(id);
@@ -20,7 +25,26 @@ export const getSingleRecipe = async id => {
       ingredients: body.ingredients,
     };
   } catch (err) {
-    console.log(err) 
+    throw new Error(`${err.response.data.message}`);
+  }
+};
+
+//Get all recipes by query
+export const getSearchRecipes = async query => {
+  try {
+    state.search.query = query;
+    const res = await appRequests.get(`?search=${query}`);
+    const body = res.data.data.recipes;
+
+    state.search.results = body.map(item => {
+      return {
+        id: item.id,
+        title: item.title,
+        publisher: item.publisher,
+        image: item.image_url,
+      };
+    });
+  } catch (err) {
     throw new Error(`${err.response.data.message}`);
   }
 };

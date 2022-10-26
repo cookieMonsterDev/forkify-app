@@ -2,28 +2,49 @@ import * as model from './model';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import recipeView from './views/recipeView';
+import sarchView from './views/searchView';
+import searchView from './views/searchView';
+import resultsView from './views/resultsView';
 
-const controlRecipe = async () => {
+if(module.hot) {
+  module.hot.accept();
+}
+
+const controlSingleRecipe = async () => {
   try {
     const id = window.location.hash.substring(1);
     if (!id) return;
 
     recipeView.renderSpiner();
 
-    // 1. loading recipe
     await model.getSingleRecipe(id);
     const res = model.state.recipe;
 
-    // 2. Rendering recipe
     recipeView.render(res);
   } catch (err) {
-    // 3. Render Error
     recipeView.renderError();
   }
 };
 
+const controlAllRecipe = async () => {
+  try {
+    resultsView.renderSpiner();
+
+    const query = sarchView.getQuery();
+    if (!query) return;
+
+    await model.getSearchRecipes(query);
+    const res = model.state.search.results
+
+    resultsView.render(res)
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const init = () => {
-  recipeView.addHandleRender(controlRecipe);
+  recipeView.addHandleRender(controlSingleRecipe);
+  searchView.addHandlerSearch(controlAllRecipe);
 };
 
 init();
