@@ -5,8 +5,9 @@ import recipeView from './views/recipeView';
 import sarchView from './views/searchView';
 import searchView from './views/searchView';
 import resultsView from './views/resultsView';
+import paginationView from './views/paginationView';
 
-if(module.hot) {
+if (module.hot) {
   module.hot.accept();
 }
 
@@ -34,17 +35,24 @@ const controlAllRecipe = async () => {
     if (!query) return;
 
     await model.getSearchRecipes(query);
-    const res = model.state.search.results
 
-    resultsView.render(res)
+    resultsView.render(model.getSearchResultsPage(1));
+
+    paginationView.render(model.state.search);
   } catch (err) {
     console.log(err);
   }
 };
 
+const controlPagination = goToPage => {
+  resultsView.render(model.getSearchResultsPage(goToPage));
+  paginationView.render(model.state.search);
+};
+
 const init = () => {
   recipeView.addHandleRender(controlSingleRecipe);
   searchView.addHandlerSearch(controlAllRecipe);
+  paginationView.addHandlerClick(controlPagination);
 };
 
 init();

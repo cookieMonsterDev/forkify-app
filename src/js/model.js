@@ -1,3 +1,4 @@
+import { RES_PRE_PAGE } from './config';
 import { appRequests } from './resquestsRoots';
 
 export const state = {
@@ -5,6 +6,8 @@ export const state = {
   search: {
     query: '',
     results: [],
+    page: 1,
+    resultsPerPage: RES_PRE_PAGE,
   },
 };
 
@@ -47,4 +50,13 @@ export const getSearchRecipes = async query => {
   } catch (err) {
     throw new Error(`${err.response.data.message}`);
   }
+};
+
+export const getSearchResultsPage = (page = state.search.page) => {
+  state.search.page = page;
+
+  const start = (page - 1) * state.search.resultsPerPage;
+  const end = page * state.search.resultsPerPage;
+
+  return state.search.results.slice(start, end);
 };

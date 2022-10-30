@@ -22,7 +22,7 @@ class ResultsView extends View {
           <p class="preview__publisher">${item.publisher}</p>
           <div class="preview__user-generated">
             <svg>
-              <use href="${icons}icon-user"></use>
+              <use href="${icons}#icon-user"></use>
             </svg>
           </div>
         </div>
