@@ -6,6 +6,7 @@ import sarchView from './views/searchView';
 import searchView from './views/searchView';
 import resultsView from './views/resultsView';
 import paginationView from './views/paginationView';
+import bookmarksView from './views/bookmarksView';
 
 if (module.hot) {
   module.hot.accept();
@@ -19,6 +20,7 @@ const controlSingleRecipe = async () => {
     recipeView.renderSpiner();
 
     resultsView.update(model.getSearchResultsPage());
+    bookmarksView.update(model.state.bookmarks);
 
     await model.getSingleRecipe(id);
     const res = model.state.recipe;
@@ -57,11 +59,27 @@ const controlServings = newServings => {
   recipeView.update(model.state.recipe);
 };
 
+const constrolAddBookmarks = () => {
+  if (!model.state.recipe.bookmarked) {
+    model.addBookmark(model.state.recipe);
+  } else model.deleteBookmark(model.state.recipe.id);
+
+  recipeView.update(model.state.recipe);
+
+  bookmarksView.render(model.state.bookmarks);
+};
+
+const controlBookmarks = () => {
+  bookmarksView.render(model.state.bookmarks)
+}
+
 const init = () => {
   recipeView.addHandleRender(controlSingleRecipe);
   searchView.addHandlerSearch(controlAllRecipe);
   paginationView.addHandlerClick(controlPagination);
   recipeView.addHandleUpdateServings(controlServings);
+  recipeView.addHandleAddBookmar(constrolAddBookmarks);
+  bookmarksView.addHandleRender(controlBookmarks);
 };
 
 init();
