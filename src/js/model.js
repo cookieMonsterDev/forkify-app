@@ -1,5 +1,6 @@
 import { RES_PRE_PAGE } from './config';
 import { appRequests } from './resquestsRoots';
+import { KEY } from './config';
 
 export const state = {
   recipe: {},
@@ -10,6 +11,20 @@ export const state = {
     resultsPerPage: RES_PRE_PAGE,
   },
   bookmarks: [],
+};
+
+const transformData = data => {
+  return {
+    id: data.id,
+    title: data.title,
+    publisher: data.publisher,
+    sourceUrl: data.source_url,
+    image: data.image_url,
+    servings: data.servings,
+    cookingTime: data.cooking_time,
+    ingredients: data.ingredients,
+    ...(data.key && { key: data.key }),
+  };
 };
 
 // Get single recipe by id
@@ -77,8 +92,8 @@ export const updateServings = newServings => {
 };
 
 const persistBookmarks = () => {
-  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks))
-}
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
 
 export const addBookmark = recipe => {
   state.bookmarks.push(recipe);
@@ -103,7 +118,48 @@ export const deleteBookmark = id => {
 
 const init = () => {
   const storage = localStorage.getItem('bookmarks');
-  if(storage) state.bookmarks = JSON.parse(storage);
-}
+  if (storage) state.bookmarks = JSON.parse(storage);
+};
 
 init();
+
+export const upLoadRecipe = async newRecipe => {
+  try {
+    const ingredients = Object.entries(newRecipe)
+      .filter(i => i[0].startsWith('ingredient') && i[1] !== '')
+      .map(ing => {
+        const ingArr = ing[1].replaceAll(' ', '').split(',');
+        if (ingArr.length !== 3) throw new Error('Wrong ingredient format :)');
+
+        const [quantity, unit, description] = ingArr;
+        return { quantity: quantity ? +quantity : null, unit, description };
+      });
+
+    const recipe = {
+      title: newRecipe.title,
+      publisher: newRecipe.publisher,
+      source_url: newRecipe.sourceUrl,
+      image_url: newRecipe.image,
+      servings: +newRecipe.servings,
+      cooking_time: +newRecipe.cookingTime,
+      ingredients,
+    };
+
+    const data = await sendRecipe(recipe);
+    state.recipe = transformData(data);
+    addBookmark(state.recipe);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const sendRecipe = async body => {
+  try {
+    const res = await appRequests.post(`?key=${KEY}`, { ...body });
+    const info = res.data.data.recipe;
+
+    return info;
+  } catch (err) {
+    throw new Error(`${err.response.data.message}`);
+  }
+};
