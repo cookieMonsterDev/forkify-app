@@ -1,10 +1,10 @@
-import React from 'react';
+
+import { AppContext } from './context/appContext';
 
 function App() {
   return (
-    <div>
-      test
-    </div>
+    <AppContext>
+    </AppContext>
   );
 }
 
