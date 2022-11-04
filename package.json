@@ -1,30 +1,43 @@
 {
   "name": "forkify-app",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "@types/react-dom": "^18.0.0",
+    "@types/react": "^18.0.25",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.4.2",
+    "web-vitals": "^2.1.0"
+  },
   "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cookieMonsterDev/forkify-app.git"
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
-  "author": "Mykhailo Toporkov",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/cookieMonsterDev/forkify-app/issues"
-  },
-  "homepage": "https://github.com/cookieMonsterDev/forkify-app#readme",
-  "devDependencies": {
-    "@parcel/transformer-sass": "^2.7.0",
-    "axios": "^1.1.3",
-    "buffer": "^6.0.3",
-    "core-js": "^3.25.5",
-    "fractional": "^1.0.0",
-    "parcel": "^2.7.0",
-    "process": "^0.11.10",
-    "regenerator-runtime": "^0.13.10",
-    "sass": "^1.55.0"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
