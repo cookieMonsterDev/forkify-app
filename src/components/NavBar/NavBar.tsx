@@ -4,6 +4,7 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import getData from '../../typescript/getData';
 
 const NavBar = () => {
   const InputRef = useRef<HTMLInputElement>(null!);
@@ -13,9 +14,19 @@ const NavBar = () => {
     setSuery(e.target.value);
   }, []);
 
-  const handleClick = () => {
-    console.log(query);
-    InputRef.current.value = '';
+  const handleClick = async () => {
+    try {
+      if (query === '') return;
+
+      const res = await getData({ query: query });
+
+      console.log(res);
+
+      InputRef.current.value = '';
+      setSuery('');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
