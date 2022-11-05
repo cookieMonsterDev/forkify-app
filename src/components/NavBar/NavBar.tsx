@@ -5,10 +5,18 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import getData from '../../typescript/getData';
+import {
+  useRecipeContext,
+  useUpdateRecipeContext,
+} from '../../context/appContext';
+import { useUpdateErrorHandlingContext } from '../../context/ErrorHandlingContext';
 
 const NavBar = () => {
   const InputRef = useRef<HTMLInputElement>(null!);
   const [query, setSuery] = useState('');
+  const updateSearch = useUpdateRecipeContext();
+  const context = useRecipeContext();
+  const setLoading = useUpdateErrorHandlingContext();
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSuery(e.target.value);
@@ -18,9 +26,13 @@ const NavBar = () => {
     try {
       if (query === '') return;
 
+      setLoading((prev) => !prev);
       const res = await getData({ query: query });
 
-      console.log(res);
+      setLoading((prev) => !prev);
+      if (!Array.isArray(res)) throw new Error('Not an array');
+
+      updateSearch({ ...context, searchResults: [...res] });
 
       InputRef.current.value = '';
       setSuery('');

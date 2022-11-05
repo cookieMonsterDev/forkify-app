@@ -5,8 +5,8 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const useRecipe = () => useContext(RecipeContext);
-export const useUpdateRecipe = () => useContext(UpdateRecipeContext);
+export const useRecipeContext = () => useContext(RecipeContext);
+export const useUpdateRecipeContext = () => useContext(UpdateRecipeContext);
 
 const RecipeContext = createContext<AppContextTypes | null>(null);
 const UpdateRecipeContext = createContext<

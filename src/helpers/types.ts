@@ -1,5 +1,7 @@
 export interface AppContextTypes {
-
+  recipe?: SearchRecipeTypes;
+  searchResults?: SearchRecipeListTypes[];
+  bookmarks?: any[];
 }
 
 export interface DefaultRecipeTypes {

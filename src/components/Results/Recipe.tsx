@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Recipe = () => {
+  console.log('render')
+
   return (
     <Container>Recipe</Container>
   )

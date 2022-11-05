@@ -16,7 +16,7 @@ const getData = async ({
   id,
   query,
   body,
-}: useFetchProps): Promise<SearchRecipeTypes | SearchRecipeListTypes | undefined> => {
+}: useFetchProps): Promise<SearchRecipeTypes | SearchRecipeListTypes[] | undefined> => {
   try {
     if (id) {
       const res = await ForkifyRoots.get(id);
