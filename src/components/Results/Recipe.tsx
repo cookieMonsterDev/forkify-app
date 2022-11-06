@@ -14,4 +14,5 @@ export default Recipe
 const Container = styled.div`
   flex: 3;
   background-color: green;
+  grid-area: main;
 `

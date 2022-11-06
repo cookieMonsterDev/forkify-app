@@ -76,10 +76,10 @@ export default React.memo(NavBar);
 
 const Container = styled.nav`
   width: 100%;
-  position: absolute;
-  height: 6rem;
+  height: 100%;
   background: linear-gradient(to left, #ece9e6, #ffffff);
   display: flex;
+  grid-area: nav;
 `;
 
 const LeftSection = styled.section`

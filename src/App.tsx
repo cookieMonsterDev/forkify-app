@@ -12,10 +12,8 @@ function App() {
       <ErrorHandlingContext>
         <Wrap>
           <NavBar />
-          <ResultsWrap>
-            <SearchResultList />
-            <Recipe />
-          </ResultsWrap>
+          <SearchResultList />
+          <Recipe />
         </Wrap>
       </ErrorHandlingContext>
     </AppContext>
@@ -25,14 +23,12 @@ function App() {
 export default App;
 
 const Wrap = styled.div`
-  width: 100vw;
+  display: grid;
   height: 100vh;
-  position: relative;
+  grid-template-columns: 0.7fr 1fr 1fr;
+  grid-template-rows: 0.2fr 1.5fr;
+  grid-template-areas: 
+    "nav nav nav"
+    "sidebar main main";
 `;
 
-const ResultsWrap = styled.div`
-  position: absolute;
-  top: 6rem;
-  width: 100vw;
-  display: flex;
-`;
