@@ -1,22 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   useRecipeContext,
   useUpdateRecipeContext,
 } from '../../context/appContext';
-import {
-  useErrorHandlingContext,
-  useUpdateErrorHandlingContext,
-} from '../../context/ErrorHandlingContext';
 import getData from '../../typescript/getData';
 import LoaderCircle from '../LoaderCircle/LoaderCircle';
 
 const Recipe = () => {
   const updateRecipe = useUpdateRecipeContext();
   const context = useRecipeContext();
-  const setLoading = useUpdateErrorHandlingContext();
-  const loading = useErrorHandlingContext();
-  const { loadingRecipe } = loading;
+  const [loading, setLoading] = useState(false)
   const data = context?.recipe!;
 
   useEffect(() => {
@@ -29,12 +23,12 @@ const Recipe = () => {
 
   const handleChange = async () => {
     try {
-      setLoading({ ...loading, loadingRecipe: true });
+      setLoading(true);
       updateRecipe({ ...context, recipe: undefined });
       const id = window.location.hash.substring(1);
 
       const res = await getData({ id: id });
-      setLoading({ ...loading, loadingRecipe: false });
+      setLoading(false);
       if (Array.isArray(res)) throw new Error('Invalid Id');
 
       updateRecipe({ ...context, recipe: { ...res! } });
@@ -47,7 +41,7 @@ const Recipe = () => {
     return <Container>{data.id}</Container>;
   }
 
-  if (loadingRecipe) {
+  if (loading) {
     return (
       <Container>
         <LoaderCircle color={'#f2851e'} duration={1500} delay={100} />

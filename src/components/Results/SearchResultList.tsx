@@ -8,13 +8,13 @@ import LoaderCircle from '../LoaderCircle/LoaderCircle';
 const SearchResultList = () => {
   const context = useRecipeContext();
   const [list, setList] = useState<SearchRecipeListTypes[] | undefined>();
-  const { loadingSearch } = useErrorHandlingContext();
+  const loading  = useErrorHandlingContext();
 
   useEffect(() => {
     setList(context?.searchResults?.slice(0, 10));
   }, [context?.searchResults]);
 
-  if (loadingSearch) {
+  if (loading) {
     return (
       <Container>
         <LoaderCircle color={'#f2851e'} duration={1500} delay={100} />
@@ -64,6 +64,7 @@ const Container = styled.div`
   align-items: center;
   position: relative;
   background: linear-gradient(to left, #ece9e6, #ffffff);
+  overflow: auto;
 `;
 
 const Preview = styled.h2`

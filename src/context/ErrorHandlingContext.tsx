@@ -4,27 +4,16 @@ interface Props {
   children: React.ReactNode;
 }
 
-interface Loader {
-  loadingSearch: boolean;
-  loadingRecipe: boolean;
-}
-
 export const useErrorHandlingContext = () => useContext(Context);
 export const useUpdateErrorHandlingContext = () => useContext(UpdateContext);
 
-const Context = createContext<Loader>({
-  loadingSearch: false,
-  loadingRecipe: false,
-});
+const Context = createContext<boolean | null>(null);
 const UpdateContext = createContext<
-  React.Dispatch<React.SetStateAction<Loader>>
+  React.Dispatch<React.SetStateAction<boolean>>
 >(null!);
 
 export const ErrorHandlingContext = ({ children }: Props) => {
-  const [state, setState] = useState<Loader>({
-    loadingSearch: false,
-    loadingRecipe: false,
-  });
+  const [state, setState] = useState<boolean>(false);
 
   return (
     <Context.Provider value={state}>

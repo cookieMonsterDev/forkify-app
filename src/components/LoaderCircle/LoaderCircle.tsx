@@ -14,7 +14,7 @@ const LoaderCircle = (props: LoaderCircleProps) => {
 
   return (
     <Container>
-      {arr.map((i: any, j: number) => {
+      {arr.map((_, j: number) => {
         return (
           <Section
             color={props.color}

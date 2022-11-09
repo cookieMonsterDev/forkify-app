@@ -10,7 +10,6 @@ import {
   useUpdateRecipeContext,
 } from '../../context/appContext';
 import {
-  useErrorHandlingContext,
   useUpdateErrorHandlingContext,
 } from '../../context/ErrorHandlingContext';
 
@@ -20,7 +19,6 @@ const NavBar = () => {
   const updateSearch = useUpdateRecipeContext();
   const context = useRecipeContext();
   const setLoading = useUpdateErrorHandlingContext();
-  const loadingContext = useErrorHandlingContext();
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSuery(e.target.value);
@@ -30,11 +28,11 @@ const NavBar = () => {
     try {
       if (query === '') return;
 
-      setLoading({ ...loadingContext, loadingSearch: true });
+      setLoading(prev => !prev);
       updateSearch({ ...context, searchResults: [] });
       const res = await getData({ query: query });
 
-      setLoading({ ...loadingContext, loadingSearch: false });
+      setLoading(prev => !prev);
       if (!Array.isArray(res)) throw new Error('Not an array');
 
       updateSearch({ ...context, searchResults: [...res] });
