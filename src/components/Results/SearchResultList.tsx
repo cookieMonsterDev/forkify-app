@@ -8,39 +8,49 @@ import LoaderCircle from '../LoaderCircle/LoaderCircle';
 const SearchResultList = () => {
   const context = useRecipeContext();
   const [list, setList] = useState<SearchRecipeListTypes[] | undefined>();
-  const loading = useErrorHandlingContext();
+  const { loadingSearch } = useErrorHandlingContext();
 
   useEffect(() => {
     setList(context?.searchResults?.slice(0, 10));
   }, [context?.searchResults]);
 
+  if (loadingSearch) {
+    return (
+      <Container>
+        <LoaderCircle color={'#f2851e'} duration={1500} delay={100} />
+      </Container>
+    );
+  }
+
+  if (list) {
+    return (
+      <Container>
+        <List>
+          {list?.map((item) => {
+            return (
+              <a href={`#${item.id}`} key={item.id}>
+                <ListItem>
+                  <Info1>
+                    <figure>
+                      <Img src={item.image} loading="lazy" />
+                    </figure>
+                  </Info1>
+                  <Info2>
+                    <h3>{item.title}</h3>
+                    <Publisher>{item.publisher}</Publisher>
+                  </Info2>
+                </ListItem>
+              </a>
+            );
+          })}
+        </List>
+      </Container>
+    );
+  }
+
   return (
     <Container>
-      {!loading ? (
-        <List>
-          {list
-            ? list?.map((item) => {
-                return (
-                  <a href={`#${item.id}`}>
-                    <ListItem key={item.id}>
-                      <Info1>
-                        <figure>
-                          <Img src={item.image} loading="lazy" />
-                        </figure>
-                      </Info1>
-                      <Info2>
-                        <h3>{item.title}</h3>
-                        <Publisher>{item.publisher}</Publisher>
-                      </Info2>
-                    </ListItem>
-                  </a>
-                );
-              })
-            : 'NO SEARCH RESULTS YET'}
-        </List>
-      ) : (
-        <LoaderCircle color={'#f2851e'} duration={1500} delay={100} />
-      )}
+      <Preview>NO SEARCH RESULTS YET</Preview>
     </Container>
   );
 };
@@ -53,6 +63,15 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  background: linear-gradient(to left, #ece9e6, #ffffff);
+`;
+
+const Preview = styled.h2`
+  margin: auto;
+  color: #675544;
+  font-size: 0.9rem;
+  font-weight: 200;
+  font-family: 'Ubuntu', sans-serif;
 `;
 
 const List = styled.ul`
