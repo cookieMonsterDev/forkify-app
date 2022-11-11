@@ -9,9 +9,7 @@ import {
   useRecipeContext,
   useUpdateRecipeContext,
 } from '../../context/appContext';
-import {
-  useUpdateErrorHandlingContext,
-} from '../../context/ErrorHandlingContext';
+import { useUpdateErrorHandlingContext } from '../../context/ErrorHandlingContext';
 
 const NavBar = () => {
   const InputRef = useRef<HTMLInputElement>(null!);
@@ -28,11 +26,11 @@ const NavBar = () => {
     try {
       if (query === '') return;
 
-      setLoading(prev => !prev);
+      setLoading((prev) => !prev);
       updateSearch({ ...context, searchResults: [] });
       const res = await getData({ query: query });
 
-      setLoading(prev => !prev);
+      setLoading((prev) => !prev);
       if (!Array.isArray(res)) throw new Error('Not an array');
 
       updateSearch({ ...context, searchResults: [...res] });

@@ -6,18 +6,21 @@ import {
 } from '../../context/appContext';
 import getData from '../../typescript/getData';
 import LoaderCircle from '../LoaderCircle/LoaderCircle';
+import RecipeView from './RecipeView';
 
 const Recipe = () => {
   const updateRecipe = useUpdateRecipeContext();
   const context = useRecipeContext();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const data = context?.recipe!;
 
   useEffect(() => {
     window.addEventListener('hashchange', handleChange);
+    window.addEventListener('load', handleLoad);
 
     return () => {
       window.removeEventListener('hashchange', handleChange);
+      window.removeEventListener('load', handleLoad);
     };
   });
 
@@ -26,6 +29,7 @@ const Recipe = () => {
       setLoading(true);
       updateRecipe({ ...context, recipe: undefined });
       const id = window.location.hash.substring(1);
+      console.log(id);
 
       const res = await getData({ id: id });
       setLoading(false);
@@ -37,8 +41,23 @@ const Recipe = () => {
     }
   };
 
+  const handleLoad = async () => {
+    try {
+      const hash = window.location.hash.substring(1);
+      if (!hash) return;
+
+      await handleChange();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   if (data) {
-    return <Container>{data.id}</Container>;
+    return (
+      <Container>
+        <RecipeView {...data}/>
+      </Container>
+    );
   }
 
   if (loading) {
@@ -49,15 +68,30 @@ const Recipe = () => {
     );
   }
 
-  return <Container>No data yet</Container>;
+  return (
+    <Container>
+      <DefaultMessage>No recipe selected yet</DefaultMessage>
+    </Container>
+  );
 };
 
 export default Recipe;
 
 const Container = styled.div`
-  flex: 3;
   grid-area: main;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+`;
+
+const DefaultMessage = styled.span`
+  padding: 2rem;
+  border-radius: 0.3rem;
+  background: lightgray;
+  color: #675544;
+  font-size: 1.5rem;
+  font-weight: 200;
+  font-family: 'Ubuntu', sans-serif;
+  text-transform: uppercase;
 `;
