@@ -16,20 +16,21 @@ const Recipe = () => {
 
   useEffect(() => {
     window.addEventListener('hashchange', handleChange);
-    window.addEventListener('load', handleLoad);
 
     return () => {
       window.removeEventListener('hashchange', handleChange);
-      window.removeEventListener('load', handleLoad);
     };
   });
+
+  useEffect(() => {
+    handleLoad();
+  }, []);
 
   const handleChange = async () => {
     try {
       setLoading(true);
       updateRecipe({ ...context, recipe: undefined });
       const id = window.location.hash.substring(1);
-      console.log(id);
 
       const res = await getData({ id: id });
       setLoading(false);
@@ -55,7 +56,7 @@ const Recipe = () => {
   if (data) {
     return (
       <Container>
-        <RecipeView {...data}/>
+        <RecipeView {...data} />
       </Container>
     );
   }
