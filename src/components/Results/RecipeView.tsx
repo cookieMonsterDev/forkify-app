@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { SearchRecipeTypes } from '../../helpers/types';
+import { Fraction } from 'fractional';
 import styled from 'styled-components';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
@@ -7,6 +8,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import CheckIcon from '@mui/icons-material/Check';
 
 const RecipeView = (props: SearchRecipeTypes) => {
   const [data, setData] = useState<SearchRecipeTypes>(props);
@@ -14,19 +16,38 @@ const RecipeView = (props: SearchRecipeTypes) => {
   const handleChangeServings = (action: string) => {
     if (action === 'inc') {
       setData((prev) => {
-        return { ...prev, servings: prev.servings + 1 };
+        return {
+          ...prev,
+          servings: prev.servings + 1,
+          ingredients: updateServings(prev.ingredients, prev.servings),
+        };
       });
+
+      console.log(data.ingredients[0]);
       return;
     }
 
     if (action === 'dec' && data.servings !== 1) {
       setData((prev) => {
-        return { ...prev, servings: prev.servings - 1 };
+        return {
+          ...prev,
+          servings: prev.servings - 1,
+          ingredients: updateServings(prev.ingredients, prev.servings),
+        };
       });
       return;
     }
 
     return;
+  };
+
+  const updateServings = (arr: string[], servings: number) => {
+    return arr.map((el: any) => {
+      return {
+        ...el,
+        quantity: ((el.quantity * servings + 1) / servings),
+      };
+    });
   };
 
   return (
@@ -39,14 +60,16 @@ const RecipeView = (props: SearchRecipeTypes) => {
         <Title>{data.title}</Title>
         <RecipeControls>
           <RecipeControlsLeft>
-            <AccessTimeIcon /> {data.cookingTime} 
+            <AccessTimeIcon /> {data.cookingTime}
             <label>MINUTES</label>
           </RecipeControlsLeft>
           <RecipeControlsMiddle>
             <PeopleAltOutlinedIcon />
             {data.servings}
             <label>SERVINGS</label>
-            <RemoveCircleOutlineIcon onClick={() => handleChangeServings('dec')}/>
+            <RemoveCircleOutlineIcon
+              onClick={() => handleChangeServings('dec')}
+            />
             <ControlPointIcon onClick={() => handleChangeServings('inc')} />
           </RecipeControlsMiddle>
           <RecipeControlsRight>
@@ -54,7 +77,42 @@ const RecipeView = (props: SearchRecipeTypes) => {
             <BookmarkBorderIcon />
           </RecipeControlsRight>
         </RecipeControls>
-        <RecipeIngredients>{data.title}</RecipeIngredients>
+        <RecipeIngredients>
+          <IngredientsListCont>
+            <IngredientsList>
+              {data.ingredients.map((i: any) => {
+                if (!i.quantity) {
+                  return (
+                    <li>
+                      <CheckIcon />
+                      <span>{i.unit}</span>
+                      <span>{i.description}</span>
+                    </li>
+                  );
+                }
+
+                return (
+                  <li>
+                    <CheckIcon />
+                    <span>
+                      {i.quantity ? new Fraction(i.quantity).toString() : ''}
+                    </span>
+                    <span>{i.unit}</span>
+                    <span>{i.description}</span>
+                  </li>
+                );
+              })}
+            </IngredientsList>
+          </IngredientsListCont>
+          <CookingDes>
+            <h1>HOW TO COOK IT</h1>
+            <h3>
+              This recipe was carefully designed and tested by {data.publisher}.
+              Please check out directions at their website.
+            </h3>
+            <a href="">To recipe description</a>
+          </CookingDes>
+        </RecipeIngredients>
       </Info>
     </Container>
   );
@@ -104,6 +162,11 @@ const Title = styled.h1`
   font-weight: 600;
   font-family: 'Ubuntu', sans-serif;
   text-transform: uppercase;
+
+  @media only screen and (max-width: 1450px) {
+    font-size: 1rem;
+    top: -2rem;
+  }
 `;
 
 const RecipeControls = styled.section`
@@ -182,6 +245,84 @@ const RecipeControlsRight = styled.div`
 
 const RecipeIngredients = styled.section`
   flex: 6;
+  display: flex;
   width: 100%;
-  background: green;
+`;
+
+const IngredientsListCont = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: auto;
+`;
+
+const IngredientsList = styled.ul`
+  height: 100%;
+  position: absolute;
+  list-style: none;
+
+  @media only screen and (max-width: 1180px) {
+    padding: 1rem;
+  }
+
+  > li {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0 0.5rem 0;
+
+    > svg {
+      margin: 0 1rem 0 1rem;
+      width: 2rem;
+      height: 2rem;
+      color: #f2851e;
+    }
+
+    span {
+      padding: 0 0.1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #675544;
+      font-family: 'Ubuntu', sans-serif;
+    }
+  }
+`;
+
+const CookingDes = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  > h1 {
+    margin-bottom: 1.6rem;
+    color: #f2851e;
+    font-size: 2rem;
+    font-weight: 600;
+    font-family: 'Ubuntu', sans-serif;
+  }
+
+  > h3 {
+    width: 70%;
+    color: #3d332a;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Ubuntu', sans-serif;
+    text-align: center;
+  }
+
+  > a {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: none;
+    border-radius: 2rem;
+    background: linear-gradient(to right, #fe5858, #ee9617);
+
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Ubuntu', sans-serif;
+  }
 `;
